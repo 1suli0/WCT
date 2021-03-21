@@ -8,6 +8,7 @@ using Serilog;
 using System;
 using WCT.Infrastructure.DBContexts;
 using WCT.Infrastructure.Extensions;
+using WCT.Infrastructure.Middleware;
 
 namespace WCT.API
 {
@@ -50,6 +51,8 @@ namespace WCT.API
                 Log.Fatal(ex, "Error migrating database.");
                 throw;
             }
+
+            app.ConfigureExceptionHandler();
 
             app.UseHttpsRedirection();
 
