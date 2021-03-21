@@ -16,5 +16,9 @@
     <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\WCT.Infrastructure\WCT.Infrastructure.csproj" />
+  </ItemGroup>
+
 
 </Project>
