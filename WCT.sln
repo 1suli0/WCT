@@ -3,7 +3,31 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31112.23
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WCT.Core", "WCT.Core\WCT.Core.csproj", "{B6609163-FCE6-4FAA-8C52-525D3CAC3DC6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WCT.Infrastructure", "WCT.Infrastructure\WCT.Infrastructure.csproj", "{9F88C14C-481A-4DF5-B8BD-CF0CF0017337}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WCT.API", "WCT.API\WCT.API.csproj", "{FFA633A2-7C1E-489D-A279-8DAC790BFF26}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B6609163-FCE6-4FAA-8C52-525D3CAC3DC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6609163-FCE6-4FAA-8C52-525D3CAC3DC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6609163-FCE6-4FAA-8C52-525D3CAC3DC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6609163-FCE6-4FAA-8C52-525D3CAC3DC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F88C14C-481A-4DF5-B8BD-CF0CF0017337}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F88C14C-481A-4DF5-B8BD-CF0CF0017337}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F88C14C-481A-4DF5-B8BD-CF0CF0017337}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F88C14C-481A-4DF5-B8BD-CF0CF0017337}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFA633A2-7C1E-489D-A279-8DAC790BFF26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFA633A2-7C1E-489D-A279-8DAC790BFF26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFA633A2-7C1E-489D-A279-8DAC790BFF26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFA633A2-7C1E-489D-A279-8DAC790BFF26}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
