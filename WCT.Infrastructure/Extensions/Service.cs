@@ -1,13 +1,15 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using WCT.Infrastructure.DBContexts;
 
 namespace WCT.Infrastructure.Extensions
 {
     public static class Service
     {
         public static void ConfigureCors(this IServiceCollection services,
-        IConfiguration configuration)
+            IConfiguration configuration)
         {
             services.AddCors(options =>
             {
@@ -56,6 +58,16 @@ namespace WCT.Infrastructure.Extensions
                         new string []{}
                     }
                 });
+            });
+        }
+
+        public static void ConfigureDbContext(this IServiceCollection services,
+            IConfiguration configuration)
+        {
+            services.AddDbContext<DBContext>(opts =>
+            {
+                opts.UseSqlServer(configuration.GetConnectionString("sqlConnection"),
+                    o => o.MigrationsAssembly("WCT.Infrastructure"));
             });
         }
     }

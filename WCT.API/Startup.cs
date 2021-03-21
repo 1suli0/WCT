@@ -1,8 +1,12 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
+using System;
+using WCT.Infrastructure.DBContexts;
 using WCT.Infrastructure.Extensions;
 
 namespace WCT.API
@@ -21,18 +25,30 @@ namespace WCT.API
         {
             services.ConfigureCors(this.Configuration);
             services.ConfigureSwagger();
+            services.ConfigureDbContext(this.Configuration);
 
             services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
+            DBContext context)
         {
             app.UseCors("CorsPolicy");
 
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+            }
+
+            try
+            {
+                context.Database.Migrate();
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(ex, "Error migrating database.");
+                throw;
             }
 
             app.UseHttpsRedirection();
