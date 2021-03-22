@@ -1,7 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using WCT.Core;
 using WCT.Infrastructure.DBContexts;
 
 namespace WCT.Infrastructure.Extensions
@@ -69,6 +73,34 @@ namespace WCT.Infrastructure.Extensions
                 opts.UseSqlServer(configuration.GetConnectionString("sqlConnection"),
                     o => o.MigrationsAssembly("WCT.Infrastructure"));
             });
+        }
+
+        public static void ConfigureIdentity(this IServiceCollection services)
+        {
+            services.AddIdentity<User, Role>(options =>
+            {
+                options.Password.RequiredLength = 6;
+                options.Password.RequireDigit = true;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequireUppercase = true;
+                options.User.RequireUniqueEmail = false;
+            })
+            .AddEntityFrameworkStores<DBContext>()
+            .AddDefaultTokenProviders();
+        }
+
+        public static void ConfigureAuthentication(this IServiceCollection services,
+           TokenValidationParameters tokenValidationParameters)
+        {
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = tokenValidationParameters;
+                });
         }
     }
 }
