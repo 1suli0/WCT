@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Linq;
 using WCT.Core;
 using WCT.Infrastructure.DBContexts;
 using WCT.Infrastructure.Interfaces;
@@ -24,9 +25,9 @@ namespace WCT.Infrastructure.Extensions
                    builder.AllowAnyHeader()
                    .WithMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                    .AllowCredentials()
-                   .WithOrigins(configuration
+                   .SetIsOriginAllowed((host) => configuration
                       .GetSection("AllowedHosts")
-                      .Get<string[]>());
+                      .Get<string[]>().Any());
                });
             });
         }
