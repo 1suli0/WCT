@@ -14,13 +14,7 @@ namespace WCT.Infrastructure.Configuration.Entities
                   Id = 1,
                   Name = "Administrator",
                   NormalizedName = "ADMINISTRATOR"
-              },
-               new Role()
-               {
-                   Id = 2,
-                   Name = "Customer",
-                   NormalizedName = "CUSTOMER"
-               });
+              });
         }
     }
 }

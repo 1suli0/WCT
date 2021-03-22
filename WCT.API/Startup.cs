@@ -41,7 +41,8 @@ namespace WCT.API
         public IConfiguration Configuration { get; }
         public TokenValidationParameters TokenValidationParameters { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        // This method gets called by the runtime. Use this method to add
+        // services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.ConfigureCors(this.Configuration);
@@ -49,11 +50,13 @@ namespace WCT.API
             services.ConfigureDbContext(this.Configuration);
             services.ConfigureIdentity();
             services.ConfigureAuthentication(this.TokenValidationParameters);
+            services.ConfigureRepositoryManager();
 
             services.AddControllers();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        // This method gets called by the runtime. Use this method to configure
+        // the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
             DBContext context)
         {

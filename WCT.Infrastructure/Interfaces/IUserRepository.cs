@@ -13,6 +13,10 @@ namespace WCT.Infrastructure.Interfaces
 
         Task<User> GetAsync(int userId);
 
+        Task<User> GetAsync(string email);
+
+        Task<IEnumerable<string>> GetRolesForUserAsync(User user);
+
         Task<IEnumerable<User>> GetAsync();
 
         Task<SignInResult> SignInAsync(User user, string password);

@@ -38,6 +38,12 @@ namespace WCT.Infrastructure.Repositories
                 .Users.FirstOrDefaultAsync(i => i.Id == userId);
         }
 
+        public async Task<User> GetAsync(string email)
+        {
+            return await this._userManager
+                .FindByEmailAsync(email);
+        }
+
         public async Task<IEnumerable<User>> GetAsync()
         {
             return await this._userManager
@@ -55,6 +61,11 @@ namespace WCT.Infrastructure.Repositories
         {
             return await this._signInManager
                 .PasswordSignInAsync(user, password, false, false);
+        }
+
+        public async Task<IEnumerable<string>> GetRolesForUserAsync(User user)
+        {
+            return await _userManager.GetRolesAsync(user);
         }
     }
 }

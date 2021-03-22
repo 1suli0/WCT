@@ -7,6 +7,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using WCT.Core;
 using WCT.Infrastructure.DBContexts;
+using WCT.Infrastructure.Interfaces;
+using WCT.Infrastructure.Repositories;
 
 namespace WCT.Infrastructure.Extensions
 {
@@ -101,6 +103,11 @@ namespace WCT.Infrastructure.Extensions
                 {
                     options.TokenValidationParameters = tokenValidationParameters;
                 });
+        }
+
+        public static void ConfigureRepositoryManager(this IServiceCollection services)
+        {
+            services.AddScoped<IRepositoryManager, RepositoryManager>();
         }
     }
 }
