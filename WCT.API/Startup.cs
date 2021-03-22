@@ -51,6 +51,7 @@ namespace WCT.API
             services.ConfigureIdentity();
             services.ConfigureAuthentication(this.TokenValidationParameters);
             services.ConfigureRepositoryManager();
+            services.ConfigureValidationFilter();
 
             services.AddControllers();
         }

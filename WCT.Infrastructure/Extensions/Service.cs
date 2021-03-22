@@ -8,6 +8,7 @@ using Microsoft.OpenApi.Models;
 using System.Linq;
 using WCT.Core;
 using WCT.Infrastructure.DBContexts;
+using WCT.Infrastructure.Filters;
 using WCT.Infrastructure.Interfaces;
 using WCT.Infrastructure.Repositories;
 
@@ -109,6 +110,11 @@ namespace WCT.Infrastructure.Extensions
         public static void ConfigureRepositoryManager(this IServiceCollection services)
         {
             services.AddScoped<IRepositoryManager, RepositoryManager>();
+        }
+
+        public static void ConfigureValidationFilter(this IServiceCollection services)
+        {
+            services.AddScoped<ValidationFilter>();
         }
     }
 }
