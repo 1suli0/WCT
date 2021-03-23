@@ -14,6 +14,7 @@ namespace WCT.Infrastructure.Repositories
         private readonly RoleManager<Role> _roleManager;
         private IRoleRepository _roleRepository;
         private IUserRepository _userRepository;
+        private IProductRepository _productRepository;
 
         public IRoleRepository RoleRepository
         {
@@ -35,6 +36,17 @@ namespace WCT.Infrastructure.Repositories
                         this._signInManager, this._context);
 
                 return this._userRepository;
+            }
+        }
+
+        public IProductRepository ProductRepository
+        {
+            get
+            {
+                if (this._productRepository == null)
+                    this._productRepository = new ProductRepository(this._context);
+
+                return this._productRepository;
             }
         }
 
