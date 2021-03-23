@@ -15,6 +15,7 @@ namespace WCT.Infrastructure.Repositories
         private IRoleRepository _roleRepository;
         private IUserRepository _userRepository;
         private IProductRepository _productRepository;
+        private IShoppingListRepository _shoppingListRepository;
 
         public IRoleRepository RoleRepository
         {
@@ -47,6 +48,17 @@ namespace WCT.Infrastructure.Repositories
                     this._productRepository = new ProductRepository(this._context);
 
                 return this._productRepository;
+            }
+        }
+
+        public IShoppingListRepository ShoppingListRepository
+        {
+            get
+            {
+                if (this._shoppingListRepository == null)
+                    this._shoppingListRepository = new ShoppingListRepository(this._context);
+
+                return this._shoppingListRepository;
             }
         }
 
