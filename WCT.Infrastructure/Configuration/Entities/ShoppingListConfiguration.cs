@@ -8,14 +8,15 @@ namespace WCT.Infrastructure.Configuration.Entities
     {
         public void Configure(EntityTypeBuilder<ShoppingList> builder)
         {
-            builder.HasKey(i => i.Name);
-            builder.Property(i => i.Name).ValueGeneratedNever();
+            builder.HasKey(i => i.Id);
             builder.Property(i => i.CreatedAt).IsRequired();
             builder.Ignore(i => i.Total);
 
+            builder.HasIndex(i => i.Name).IsUnique();
             builder.HasMany(i => i.ShoppingListItems)
                 .WithOne()
-                .HasForeignKey(i => i.ShoppingListId);
+                .HasForeignKey(i => i.ShoppingListId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

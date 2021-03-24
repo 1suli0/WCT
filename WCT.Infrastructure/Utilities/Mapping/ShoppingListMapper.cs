@@ -16,12 +16,17 @@ namespace WCT.Infrastructure.Utilities.Mapping
                 UserId = userId,
                 CreatedAt = DateTime.UtcNow,
                 ShoppingListItems = shoppingListDTO.ShoppingListItems
-                .Select(shoppingListItem => new ShoppingListItem
-                {
-                    Quantity = shoppingListItem.Quantity,
-                    Price = shoppingListItem.Price,
-                    ProductId = shoppingListItem.ProductId
-                }).ToList()
+                .Select(shoppingListItem => Map(shoppingListItem)).ToList()
+            };
+        }
+
+        public static ShoppingListItem Map(InShoppingListItemDTO shoppingListItemDTO)
+        {
+            return new ShoppingListItem
+            {
+                Quantity = shoppingListItemDTO.Quantity,
+                Price = shoppingListItemDTO.Price,
+                ProductId = shoppingListItemDTO.ProductId
             };
         }
 

@@ -20,7 +20,7 @@
             }
         }
 
-        public string ShoppingListId { get; set; }
+        public int ShoppingListId { get; set; }
         public int ProductId { get; set; }
         public Product Product { get; set; }
     }

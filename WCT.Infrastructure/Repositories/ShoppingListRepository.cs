@@ -27,21 +27,23 @@ namespace WCT.Infrastructure.Repositories
             return base.Create(list);
         }
 
-        public async Task<bool> ExistAsync(string name, bool trackChanges)
+        public async Task<bool> ExistAsync(string name, int userId, bool trackChanges)
         {
             return await base.Entity(trackChanges)
-                .AnyAsync(i => i.Name == name);
+                .AnyAsync(i => i.Name == name && i.UserId == userId);
         }
 
-        public async Task<ShoppingList> GetAsync(string name, bool trackChanges)
+        public async Task<ShoppingList> GetAsync(string name, int userId, bool trackChanges)
         {
             return await this.Entity(trackChanges)
-                .FirstOrDefaultAsync(i => i.Name == name);
+                .FirstOrDefaultAsync(i => i.Name == name && i.UserId == userId);
         }
 
-        public async Task<IEnumerable<ShoppingList>> GetAsync(bool trackChanges)
+        public async Task<IEnumerable<ShoppingList>> GetAsync(int userId, bool trackChanges)
         {
-            return await base.Entity(trackChanges).ToListAsync();
+            return await base.Entity(trackChanges)
+                .Where(i => i.UserId == userId)
+                .ToListAsync();
         }
 
         public new void Delete(ShoppingList list)

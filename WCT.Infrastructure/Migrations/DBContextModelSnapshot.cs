@@ -210,7 +210,7 @@ namespace WCT.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "8f1657f7-59bf-4090-b637-20b96db26f00",
+                            ConcurrencyStamp = "2b0119bb-6e6b-4c2e-b5a6-ef22f1ace5cf",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
@@ -218,16 +218,25 @@ namespace WCT.Infrastructure.Migrations
 
             modelBuilder.Entity("WCT.Core.ShoppingList", b =>
                 {
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.HasKey("Name");
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasFilter("[Name] IS NOT NULL");
 
                     b.HasIndex("UserId");
 
@@ -250,8 +259,8 @@ namespace WCT.Infrastructure.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<string>("ShoppingListId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("ShoppingListId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -333,13 +342,13 @@ namespace WCT.Infrastructure.Migrations
                         {
                             Id = 1,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "71c5f345-68b6-43e0-ac88-41b014ca7163",
+                            ConcurrencyStamp = "39eb20af-0c27-49a8-a4d7-f1e9fd9d914b",
                             Email = "admin@test.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@TEST.COM",
                             NormalizedUserName = "ADMIN@TEST.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEKgMasuPeW2x/lg1Z82T5KJ+yOGB34/QG8gXBfW1Auakip0qxD8zMCbNBiqWP6TkSg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEGipyeO1r71K2bhF+Q8ssR9tKTgDx3runGwS+0DAZoX2bG8ltXIiNTmkp0RLH0QTyg==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -417,7 +426,9 @@ namespace WCT.Infrastructure.Migrations
 
                     b.HasOne("WCT.Core.ShoppingList", null)
                         .WithMany("ShoppingListItems")
-                        .HasForeignKey("ShoppingListId");
+                        .HasForeignKey("ShoppingListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

@@ -172,13 +172,15 @@ namespace WCT.Infrastructure.Migrations
                 name: "ShoppingList",
                 columns: table => new
                 {
-                    Name = table.Column<string>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(nullable: true),
                     UserId = table.Column<int>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ShoppingList", x => x.Name);
+                    table.PrimaryKey("PK_ShoppingList", x => x.Id);
                     table.ForeignKey(
                         name: "FK_ShoppingList_AspNetUsers_UserId",
                         column: x => x.UserId,
@@ -195,7 +197,7 @@ namespace WCT.Infrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Quantity = table.Column<int>(nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    ShoppingListId = table.Column<string>(nullable: true),
+                    ShoppingListId = table.Column<int>(nullable: false),
                     ProductId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -211,19 +213,19 @@ namespace WCT.Infrastructure.Migrations
                         name: "FK_ShoppingListItem_ShoppingList_ShoppingListId",
                         column: x => x.ShoppingListId,
                         principalTable: "ShoppingList",
-                        principalColumn: "Name",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 1, "8f1657f7-59bf-4090-b637-20b96db26f00", "Administrator", "ADMINISTRATOR" });
+                values: new object[] { 1, "2b0119bb-6e6b-4c2e-b5a6-ef22f1ace5cf", "Administrator", "ADMINISTRATOR" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { 1, 0, "71c5f345-68b6-43e0-ac88-41b014ca7163", "admin@test.com", false, false, null, "ADMIN@TEST.COM", "ADMIN@TEST.COM", "AQAAAAEAACcQAAAAEKgMasuPeW2x/lg1Z82T5KJ+yOGB34/QG8gXBfW1Auakip0qxD8zMCbNBiqWP6TkSg==", null, false, "", false, "admin@test.com" });
+                values: new object[] { 1, 0, "39eb20af-0c27-49a8-a4d7-f1e9fd9d914b", "admin@test.com", false, false, null, "ADMIN@TEST.COM", "ADMIN@TEST.COM", "AQAAAAEAACcQAAAAEGipyeO1r71K2bhF+Q8ssR9tKTgDx3runGwS+0DAZoX2bG8ltXIiNTmkp0RLH0QTyg==", null, false, "", false, "admin@test.com" });
 
             migrationBuilder.InsertData(
                 table: "Product",
@@ -280,6 +282,13 @@ namespace WCT.Infrastructure.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ShoppingList_Name",
+                table: "ShoppingList",
+                column: "Name",
+                unique: true,
+                filter: "[Name] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ShoppingList_UserId",

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WCT.Infrastructure.DTOs.Input;
 using WCT.Infrastructure.DTOs.Output;
+using WCT.Infrastructure.Extensions;
 using WCT.Infrastructure.Interfaces;
 using WCT.Infrastructure.Utilities.Mapping;
 
@@ -32,7 +33,7 @@ namespace WCT.API.Controllers
                 return BadRequest();
 
             if (await this._repositoryManager.ShoppingListRepository
-                .ExistAsync(shoppingListDTO.Name))
+                .ExistAsync(shoppingListDTO.Name, int.Parse(userId)))
                 return BadRequest("Shopping list already exists in database.");
 
             var list = this._repositoryManager.ShoppingListRepository
@@ -42,7 +43,37 @@ namespace WCT.API.Controllers
 
             //load dependencies
             list = await _repositoryManager.ShoppingListRepository
-                .GetAsync(list.Name, false);
+                .GetAsync(list.Name, int.Parse(userId), false);
+
+            return Ok(ShoppingListMapper.Map(list));
+        }
+
+        [HttpPut("{name}")]
+        [Produces(typeof(OutShoppingListDTO))]
+        public async Task<IActionResult> UpdateAsync([FromRoute] string name,
+            [FromBody] InShoppingListDTO shoppingListDTO)
+        {
+            var userId = HttpContext.User?.Claims?
+                    .FirstOrDefault(c => c.Type == "userId")?.Value;
+
+            if (string.IsNullOrEmpty(userId))
+                return BadRequest();
+
+            if (!await this._repositoryManager.ShoppingListRepository
+                .ExistAsync(name, int.Parse(userId)))
+                return BadRequest("Shopping list doesn't exists in database, " +
+                    "or you do not have access to it.");
+
+            var list = await this._repositoryManager.ShoppingListRepository
+                .GetAsync(name, int.Parse(userId));
+
+            list.Update(shoppingListDTO);
+
+            await this._repositoryManager.SaveAsync();
+
+            //load dependencies
+            list = await _repositoryManager.ShoppingListRepository
+                .GetAsync(list.Name, int.Parse(userId), false);
 
             return Ok(ShoppingListMapper.Map(list));
         }
