@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace WCT.Infrastructure.Filters
 {
-    public class ValidationFilter : IActionFilter
+    public class ModelStateValidationFilter : IActionFilter
     {
         public void OnActionExecuted(ActionExecutedContext context)
         {

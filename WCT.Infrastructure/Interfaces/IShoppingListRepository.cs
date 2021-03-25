@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using WCT.Core;
 
@@ -12,7 +13,8 @@ namespace WCT.Infrastructure.Interfaces
 
         public Task<ShoppingList> GetAsync(string name, int userId, bool trackChanges = true);
 
-        public Task<IEnumerable<ShoppingList>> GetAsync(int userId, bool trackChanges = false);
+        public Task<IEnumerable<ShoppingList>> GetAsync(int userId,
+            DateTime from, DateTime to, bool trackChanges = false);
 
         public void Delete(ShoppingList list);
     }

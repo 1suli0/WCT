@@ -114,7 +114,12 @@ namespace WCT.Infrastructure.Extensions
 
         public static void ConfigureValidationFilter(this IServiceCollection services)
         {
-            services.AddScoped<ValidationFilter>();
+            services.AddScoped<ModelStateValidationFilter>();
+        }
+
+        public static void ConfigureUserValidationFilter(this IServiceCollection services)
+        {
+            services.AddScoped<UserValidation>();
         }
     }
 }

@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using WCT.Infrastructure.DTOs.Input;
 using WCT.Infrastructure.DTOs.Output;
 using WCT.Infrastructure.Extensions;
+using WCT.Infrastructure.Filters;
 using WCT.Infrastructure.Interfaces;
 using WCT.Infrastructure.Utilities.Mapping;
 
@@ -13,6 +15,7 @@ namespace WCT.API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize()]
+    [ServiceFilter(typeof(UserValidation))]
     public class ShoppingListController : ControllerBase
     {
         private readonly IRepositoryManager _repositoryManager;
@@ -26,11 +29,8 @@ namespace WCT.API.Controllers
         [Produces(typeof(OutShoppingListDTO))]
         public async Task<IActionResult> CreateAsync([FromBody] InShoppingListDTO shoppingListDTO)
         {
-            var userId = HttpContext.User?.Claims?
-                    .FirstOrDefault(c => c.Type == "userId")?.Value;
-
-            if (string.IsNullOrEmpty(userId))
-                return BadRequest();
+            var userId = HttpContext.User.Claims
+                    .First(c => c.Type == "userId")?.Value;
 
             if (await this._repositoryManager.ShoppingListRepository
                 .ExistAsync(shoppingListDTO.Name, int.Parse(userId)))
@@ -53,11 +53,8 @@ namespace WCT.API.Controllers
         public async Task<IActionResult> UpdateAsync([FromRoute] string name,
             [FromBody] InShoppingListDTO shoppingListDTO)
         {
-            var userId = HttpContext.User?.Claims?
-                    .FirstOrDefault(c => c.Type == "userId")?.Value;
-
-            if (string.IsNullOrEmpty(userId))
-                return BadRequest();
+            var userId = this.HttpContext.User
+               .Claims.First(c => c.Type == "userId").Value;
 
             if (!await this._repositoryManager.ShoppingListRepository
                 .ExistAsync(name, int.Parse(userId)))
@@ -76,6 +73,23 @@ namespace WCT.API.Controllers
                 .GetAsync(list.Name, int.Parse(userId), false);
 
             return Ok(ShoppingListMapper.Map(list));
+        }
+
+        [HttpGet("from/{from}/to/{to}")]
+        [Produces(typeof(OutShoppingListDTO))]
+        public async Task<IActionResult> GetAsync([FromRoute] long from,
+          [FromRoute] long to)
+        {
+            var userId = this.HttpContext.User
+                          .Claims.First(c => c.Type == "userId").Value;
+
+            var startTime = DateTimeOffset.FromUnixTimeMilliseconds(from).DateTime;
+            var endTime = DateTimeOffset.FromUnixTimeMilliseconds(to).DateTime;
+
+            var list = await _repositoryManager.ShoppingListRepository
+                .GetAsync(int.Parse(userId), startTime, endTime);
+
+            return Ok(list.Select(i => ShoppingListMapper.Map(i)));
         }
     }
 }

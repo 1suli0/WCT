@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -39,10 +40,11 @@ namespace WCT.Infrastructure.Repositories
                 .FirstOrDefaultAsync(i => i.Name == name && i.UserId == userId);
         }
 
-        public async Task<IEnumerable<ShoppingList>> GetAsync(int userId, bool trackChanges)
+        public async Task<IEnumerable<ShoppingList>> GetAsync(int userId,
+            DateTime from, DateTime to, bool trackChanges)
         {
-            return await base.Entity(trackChanges)
-                .Where(i => i.UserId == userId)
+            return await this.Entity(trackChanges)
+                .Where(i => i.UserId == userId && i.CreatedAt >= from && i.CreatedAt <= to)
                 .ToListAsync();
         }
 

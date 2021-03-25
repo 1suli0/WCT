@@ -13,7 +13,7 @@ namespace WCT.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [ServiceFilter(typeof(ValidationFilter))]
+    [ServiceFilter(typeof(ModelStateValidationFilter))]
     public class UserController : ControllerBase
     {
         private readonly IRepositoryManager _repositoryManager;
@@ -43,13 +43,11 @@ namespace WCT.API.Controllers
 
         [Authorize()]
         [HttpPut("change/password")]
+        [ServiceFilter(typeof(UserValidation))]
         public async Task<IActionResult> ChangePasswordAsync([FromBody] InChangePasswordDTO changePasswordDTO)
         {
-            var userId = this.HttpContext.User?
-                .Claims?.FirstOrDefault(c => c.Type == "userId")?.Value;
-
-            if (userId == null)
-                return Unauthorized();
+            var userId = this.HttpContext.User
+                .Claims.First(c => c.Type == "userId").Value;
 
             var user = await _repositoryManager.UserRepository
                 .GetAsync(int.Parse(userId));
