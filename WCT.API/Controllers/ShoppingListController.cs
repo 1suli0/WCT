@@ -91,5 +91,26 @@ namespace WCT.API.Controllers
 
             return Ok(list.Select(i => ShoppingListMapper.Map(i)));
         }
+
+        [HttpDelete("{name}")]
+        public async Task<IActionResult> DeleteAsync([FromRoute] string name)
+        {
+            var userId = this.HttpContext.User
+                          .Claims.First(c => c.Type == "userId").Value;
+
+            if (!await this._repositoryManager.ShoppingListRepository
+              .ExistAsync(name, int.Parse(userId)))
+                return BadRequest("Shopping list doesn't exists in database, " +
+                    "or you do not have access to it.");
+
+            var list = await _repositoryManager.ShoppingListRepository
+                .GetAsync(name, int.Parse(userId));
+
+            _repositoryManager.ShoppingListRepository.Delete(list);
+
+            await _repositoryManager.SaveAsync();
+
+            return Ok();
+        }
     }
 }
